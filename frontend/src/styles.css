@@ -1,0 +1,464 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --paper: #FBFAF7;
+  --ink: #1A1A1A;
+  --ink-muted: #6B6966;
+  --hairline: #E3E0D8;
+  --accent: #3D5AFE;
+  --accent-faint: #EEF1FF;
+  --accent-hover: #2a3fc0;
+  --error-bg: #FFF1F0;
+  --error-border: #FFCCC7;
+  --error-text: #CF1322;
+  --success: #12B886;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Layout ─── */
+
+.app-container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+
+.app-header {
+  padding: 3.5rem 0 2rem;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 2.5rem;
+}
+
+.app-title {
+  font-family: var(--mono);
+  font-size: 1.875rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+}
+
+.app-tagline {
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.app-main {
+  padding-top: 0.5rem;
+}
+
+/* ─── Link input ─── */
+
+.link-input-wrapper {
+  margin-bottom: 2rem;
+}
+
+.link-form {
+  margin-bottom: 0.625rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.link-input {
+  flex: 1;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius);
+  background: white;
+  color: var(--ink);
+  transition: border-color 0.15s;
+  min-width: 0;
+  appearance: none;
+}
+
+.link-input::placeholder {
+  color: #b0aaa6;
+}
+
+.link-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+.link-input.input-error {
+  border-color: var(--error-text);
+}
+
+.input-error-msg {
+  color: var(--error-text);
+  font-size: 0.875rem;
+  margin: 0.5rem 0 0;
+}
+
+.input-hint {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  margin: 0.5rem 0 0;
+  line-height: 1.5;
+}
+
+/* ─── Buttons ─── */
+
+.btn-primary {
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #333;
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── Progress ─── */
+
+.progress-wrapper {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: white;
+}
+
+.stage-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.stage-pill {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  color: var(--ink-muted);
+  background: var(--paper);
+  font-family: var(--sans);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.stage-pill.pill-done {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.stage-pill.pill-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-faint);
+  font-weight: 500;
+}
+
+.pill-check {
+  font-size: 0.75rem;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--hairline);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 0.875rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.stage-label {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* ─── Error ─── */
+
+.error-box {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius);
+  color: var(--error-text);
+}
+
+.error-box strong {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.9375rem;
+}
+
+.error-box p {
+  margin: 0 0 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* ─── Done header ─── */
+
+.done-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+
+.video-summary {
+  font-size: 1rem;
+  color: var(--ink-muted);
+  margin: 0;
+  font-style: italic;
+  flex: 1;
+  line-height: 1.6;
+  min-width: 200px;
+}
+
+/* ─── Step list ─── */
+
+.step-list-wrapper {
+  margin-top: 0.5rem;
+}
+
+.video-title-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 1.25rem;
+}
+
+.step-list-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2.25rem;
+  flex-wrap: wrap;
+}
+
+/* ─── THE NUMBERED RAIL — the signature element ─── */
+
+.step-rail {
+  position: relative;
+}
+
+.step-card {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+}
+
+.step-number-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 4.5rem;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.step-number {
+  font-family: var(--mono);
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: var(--accent);
+  line-height: 1;
+  margin-top: 0.625rem;
+  display: block;
+  user-select: none;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.step-connector {
+  width: 1px;
+  flex: 1;
+  min-height: 1.5rem;
+  background: var(--hairline);
+  margin-top: 0.5rem;
+}
+
+.step-content {
+  flex: 1;
+  padding: 0.625rem 0.5rem 2rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.step-card:last-child .step-content {
+  border-bottom: none;
+  padding-bottom: 0.5rem;
+}
+
+.step-text {
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--ink);
+  margin: 0 0 0.875rem;
+}
+
+.timestamp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  background: var(--accent-faint);
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.timestamp-chip:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.timestamp-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.timestamp-chip--static {
+  cursor: default;
+  color: var(--ink-muted);
+  background: var(--paper);
+  border-color: var(--hairline);
+}
+
+.timestamp-chip--static:hover {
+  background: var(--paper);
+  color: var(--ink-muted);
+  border-color: var(--hairline);
+}
+
+/* ─── Mobile ─── */
+
+@media (max-width: 640px) {
+  .app-container {
+    padding: 0 1rem 3rem;
+  }
+
+  .app-header {
+    padding: 2rem 0 1.5rem;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .done-header {
+    flex-direction: column;
+  }
+
+  .step-number {
+    font-size: 2rem;
+  }
+
+  .step-number-col {
+    width: 3.5rem;
+  }
+}
+
+/* ─── Reduced motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar-fill,
+  .btn-primary,
+  .btn-secondary,
+  .link-input,
+  .timestamp-chip,
+  .stage-pill {
+    transition: none;
+  }
+}
