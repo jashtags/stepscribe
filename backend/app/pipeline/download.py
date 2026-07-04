@@ -13,7 +13,8 @@ async def download_video(url: str, job_dir: Path) -> dict:
     video_path = job_dir / "video.mp4"
 
     ydl_opts = {
-        "format": "best[ext=mp4]/best",
+        "format": "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best",
+        "merge_output_format": "mp4",
         "outtmpl": str(video_path),
         "writesubtitles": True,
         "writeautomaticsub": True,
