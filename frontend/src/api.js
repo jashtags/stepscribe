@@ -18,3 +18,12 @@ export async function pollJob(jobId) {
   if (!res.ok) throw new Error('Job not found')
   return res.json()
 }
+
+export async function generateSkillFile(jobId) {
+  const res = await fetch(`${BASE}/api/jobs/${jobId}/skill`, { method: 'POST' })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    throw new Error(err.detail || 'Failed to generate skill file')
+  }
+  return res.text()
+}

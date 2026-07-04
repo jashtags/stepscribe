@@ -3,45 +3,50 @@ import re
 
 import httpx
 
-SYSTEM_PROMPT = """You convert a tutorial video into clear, ordered steps for a beginner.
-You are given the spoken transcript (with timestamps) and descriptions of
-key on-screen moments. Produce a numbered list of actions the viewer must
-take to reproduce the result.
+SYSTEM_PROMPT = """You are a meticulous tutorial analyst. Your job is to extract EVERY concrete action the viewer must take.
 
-Rules:
-- Each step is ONE concrete action, in plain language.
-- Say WHERE to click / tap and WHAT to do ("Tap the + icon at the bottom",
-  not "add media").
-- Use the exact tool, button, and setting names shown on screen when known.
-- Attach the start timestamp (seconds) of the moment the step begins.
-- Merge filler; drop intros, outros, and "like and subscribe".
-- If the video says "link in bio / comment X", add a final step noting a
-  link is referenced and that the user should check the source, but DO NOT
-  invent a URL.
+You receive a spoken transcript with timestamps from a tutorial video. Extract each distinct user action as a numbered step.
 
-Return ONLY valid JSON, no prose, no markdown fences:
+STRICT RULES:
+1. Produce AT LEAST 5 steps. Most tutorials have 8–20 steps.
+2. Each step = ONE physical action: open a site, click a button, type something, tap an icon, select a menu item.
+3. Name EVERY website URL, app, tool, icon, and button EXACTLY as mentioned or shown (e.g. "animeclipsraw.fr", "hamburger icon", "search bar at the top").
+4. Include exact screen locations: "top-right corner", "bottom navigation bar", "hamburger menu (☰) at the top-left".
+5. If the presenter says to go to a website, that is ONE step: "Open [exact URL] in your browser."
+6. If they click a specific icon/button, that is ONE step: "Click the [name] icon in the [location]."
+7. If they type something, include exactly what to type.
+8. Split ANY compound action into separate steps.
+9. Drop intros, outros, and "like and subscribe" filler.
+10. For any referenced URL or link mentioned verbally (not shown), include it as-is; DO NOT invent URLs.
+
+Also extract:
+- tools: a list of every website, app, or tool mentioned by name
+
+Return ONLY valid JSON (no markdown fences, no extra text):
 {
-  "summary": "one sentence on what this tutorial achieves",
+  "summary": "one sentence describing exactly what this tutorial achieves",
+  "tools": ["website1.com", "App Name", "tool name"],
   "steps": [
-    { "n": 1, "text": "...", "start": 12.4 }
+    { "n": 1, "text": "Exact action description.", "start": 5.0 }
   ]
 }"""
 
 
 def _build_user_prompt(transcript: list[dict], frames: list[dict]) -> str:
-    parts = ["## Transcript (timestamps in seconds)\n"]
-    for seg in transcript[:200]:
+    parts = ["## Spoken transcript (timestamps in seconds — use these for the 'start' field)\n"]
+    for seg in transcript[:300]:
         parts.append(f"[{seg['start']:.1f}s] {seg['text']}")
 
     if frames:
-        parts.append("\n## Key on-screen moments\n")
+        parts.append("\n## On-screen changes detected by keyframe analysis\n")
         for frame in frames[:30]:
             ocr = frame.get("ocr_text", "")
             if ocr:
-                parts.append(f"[{frame['timestamp']:.1f}s] Screen shows: {ocr}")
+                parts.append(f"[{frame['timestamp']:.1f}s] Screen text visible: {ocr}")
             else:
-                parts.append(f"[{frame['timestamp']:.1f}s] Screen change detected")
+                parts.append(f"[{frame['timestamp']:.1f}s] Visual scene change")
 
+    parts.append("\n## Your task\nExtract every user action as a numbered step. Be specific about UI elements and websites. Return valid JSON only.")
     return "\n".join(parts)
 
 

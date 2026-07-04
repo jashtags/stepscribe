@@ -41,7 +41,7 @@ export default function App() {
             setPhase('error')
           }
         } catch {
-          // transient — keep polling
+          // transient network error — keep polling
         }
       }, 2000)
     } catch (e) {
@@ -59,47 +59,65 @@ export default function App() {
   }
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <h1 className="app-title">StepScribe</h1>
-        <p className="app-tagline">Paste a tutorial link. Get clear numbered steps.</p>
-      </header>
+    <>
+      {/* Liquid glass background orbs */}
+      <div className="bg-orbs" aria-hidden="true">
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+        <div className="orb orb-3" />
+      </div>
 
-      <main className="app-main">
-        {(phase === 'idle' || phase === 'submitting' || phase === 'error') && (
-          <LinkInput onSubmit={handleSubmit} disabled={phase === 'submitting'} />
-        )}
-
-        {phase === 'error' && (
-          <div className="error-box" role="alert">
-            <strong>Something went wrong</strong>
-            <p>{errorMsg}</p>
-            <button className="btn-secondary" onClick={handleReset}>
-              Try another link
-            </button>
+      <div className="app-container">
+        <header className="app-header">
+          <div className="app-logo-row">
+            <div className="logo-icon" aria-hidden="true">⏱</div>
+            <h1 className="app-title">StepScribe</h1>
           </div>
-        )}
+          <p className="app-tagline">
+            Paste any tutorial link — get precise, numbered steps with timestamps.
+          </p>
+        </header>
 
-        {(phase === 'polling' || phase === 'submitting') && (
-          <ProgressLog
-            stage={job?.stage || 'Starting…'}
-            progress={job?.progress || 0}
-            status={job?.status || 'processing'}
-          />
-        )}
+        <main>
+          {(phase === 'idle' || phase === 'submitting' || phase === 'error') && (
+            <div className="glass-card" style={{ padding: '1.75rem', marginBottom: '2rem' }}>
+              <LinkInput onSubmit={handleSubmit} disabled={phase === 'submitting'} />
+            </div>
+          )}
 
-        {phase === 'done' && job && (
-          <>
-            <div className="done-header">
-              {job.summary && <p className="video-summary">{job.summary}</p>}
+          {phase === 'error' && (
+            <div className="error-box" role="alert">
+              <strong>Processing failed</strong>
+              <p>{errorMsg}</p>
               <button className="btn-secondary" onClick={handleReset}>
-                Process another video
+                Try another link
               </button>
             </div>
-            <StepList steps={job.steps} video={job.video} />
-          </>
-        )}
-      </main>
-    </div>
+          )}
+
+          {(phase === 'polling' || phase === 'submitting') && (
+            <div className="glass-card" style={{ marginBottom: '2rem' }}>
+              <ProgressLog
+                stage={job?.stage || 'Starting…'}
+                progress={job?.progress || 0}
+                status={job?.status || 'processing'}
+              />
+            </div>
+          )}
+
+          {phase === 'done' && job && (
+            <div className="glass-card" style={{ padding: '2rem' }}>
+              <div className="done-header">
+                {job.summary && <p className="video-summary">{job.summary}</p>}
+                <button className="btn-secondary" onClick={handleReset}>
+                  Process another video
+                </button>
+              </div>
+              <StepList steps={job.steps} video={job.video} jobId={jobId} />
+            </div>
+          )}
+        </main>
+      </div>
+    </>
   )
 }
