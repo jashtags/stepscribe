@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
 
 export default function SkillModal({ content, loading, onClose }) {
   // Trap escape key
@@ -23,7 +24,7 @@ export default function SkillModal({ content, loading, onClose }) {
     try { await navigator.clipboard.writeText(content) } catch {}
   }
 
-  return (
+  return ReactDOM.createPortal(
     <div
       className="modal-backdrop"
       role="dialog"
@@ -66,6 +67,7 @@ export default function SkillModal({ content, loading, onClose }) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
